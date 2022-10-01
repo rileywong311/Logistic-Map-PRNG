@@ -1,0 +1,57 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from GeneratorCode import *
+
+# Generator
+def generate(N):
+    intrin = intrinsic_generator()
+    A_sq = N
+    A_cu = 0
+    hits_x = []
+    hits_y = []
+
+    for i in range(N):
+        x = intrin.gen()
+        y = intrin.gen()
+
+        hits_x.append(x)
+        hits_y.append(y)
+        if (x**2 + y**2) <= 1: # if the vector length is less than the radius
+            A_cu += 1
+
+    return A_cu, A_sq, hits_x, hits_y
+
+# Run generator
+N = 1000
+A_curve, A_square, hits_x, hits_y = generate(N)
+P = 4 * (A_curve / A_square)
+variance = 16 * (1 / N) * (A_curve / N) * (1 - (A_curve / N))
+error = np.sqrt(variance)
+
+# Results
+print('The estimate of: {:.3} +/- {:.1}'.format(P, error))
+plt.figure()
+plt.plot(hits_x, hits_y, '.')
+plt.grid()
+plt.show()
+
+# Monte Carlo Sim at higher generations
+x = []
+y = []
+values = [10, 50, 100, 500, 1000, 5000, 10000, 50000]
+for N in values:
+    A_curve, A_square, _, _ = generate(N)
+    P = 4 * (A_curve / A_square)
+    variance = 16 * (1 / N) * (A_curve / N) * (1 - (A_curve / N))
+    error = np.sqrt(variance)
+    x.append(P - np.pi)
+    y.append(error)
+
+plt.figure()
+plt.plot(values, x, 'o--')
+plt.plot(values, y, 'o--')
+plt.ylim(-1, 1)
+plt.xscale('log')
+plt.legend(['P - $\pi$', 'error'])
+plt.grid()
+plt.show()

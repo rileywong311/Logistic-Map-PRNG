@@ -43,6 +43,7 @@ def seed_init():
     return time_current
 
 
+"""
 # standard generation method
 intrin = intrinsic_generator()
 
@@ -63,3 +64,4 @@ plt.xlabel("Value")
 plt.ylabel("Amount")
 plt.hist(l, bins=50)
 plt.show()
+"""
